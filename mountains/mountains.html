@@ -252,6 +252,24 @@
       color: #7a6a8a;
     }
 
+    .weather-btn {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      background: #1a2a3a;
+      color: #5ba3d9;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .weather-btn:hover {
+      background: #253d54;
+      color: #7dc0f0;
+    }
+
     .detail-panel {
       display: none;
       background: #152030;
@@ -557,6 +575,7 @@
       { key: 'Area_Name', label: 'Area' },
       { key: 'Car_Park', label: 'Car Park' },
       { key: 'Toilets_Info', label: 'Toilets' },
+      { key: 'Weather', label: 'Weather', type: 'weather' },
     ];
 
     let currentTab = 'Munros';
@@ -625,7 +644,14 @@
           let v = r[c.key] || '';
           let cls = '';
           v = v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-          if (c.key === 'Is_Climbed') {
+          if (c.type === 'weather') {
+            const pc = r['PostCode'] || '';
+            if (pc) {
+              v = '<a href="https://www.bbc.co.uk/weather/' + pc.toLowerCase() + '" target="_blank" rel="noopener" class="weather-btn" onclick="event.stopPropagation()">' + pc + '</a>';
+            } else {
+              v = '\u2014'; cls = 'no-data';
+            }
+          } else if (c.key === 'Is_Climbed') {
             cls = v === 'Yes' ? 'climbed-yes' : 'climbed-no';
             v = v === 'Yes' ? '<span class="pill pill-yes">Yes</span>' : '<span class="pill pill-no">No</span>';
           } else if (c.key === 'Users_Rating' && v) {
